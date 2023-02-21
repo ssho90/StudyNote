@@ -19,7 +19,8 @@ https://lg-cns.udemy.com/course/certified-kubernetes-administrator-with-practice
 >ETCD v3 이상은 API version : 3이 Default이다.  
 > .   
 > ![img_1.png](img_1.png)  
->API 버전 바꾸고 싶으면 이런식으로 하면 된다.
+>API 버전 바꾸고 싶으면 이런식으로 하면 된다.  
+>.
 
 ---
 ## <b>쿠버네티스 아키텍처구조</b>
@@ -38,3 +39,21 @@ https://lg-cns.udemy.com/course/certified-kubernetes-administrator-with-practice
 >7. 그러면 받은 정보대로 kublet은 pod를 생성한다.  
 >8. kublet은 worker node 내의 Container Runtime Engine에 이미지 배포를 위해 정보를 전달한다.  
 >9. 완료되면 kublet은 다시 api server로 업데이트된 데이터를 전달하고 api server는 다시 etcd로 데이터를 전달한다. 당연히 etcd는 다시 데이터를 update 한다.  
+
+---
+## <b>Kube-Controller Manager
+![Alt text](img_3.png)  
+* 그림과 같이 다양한 Controller가 존재하며, 이런 Controller를 관리하는 역할을 한다.
+
+---
+## <b>Kube Scheduler
+* Kube Scheduler는 Pod가 어느 Node에 위치 할 지 정해주는 역할을 한다.   
+* Pod의 리소스에 맞게 최적의 Node를 선별하는 기준을 갖고 있다. (Filter Nodes, Rank Nodes 등)
+* 실제로 Pod를 위치시키는 것은 Kube Scheduler가 정한 Worker Node의 Kubelet이다.
+
+---
+## <b>Kubelet
+![Alt text](img_4.png)
+Kublet Architecture Flow를 알아보자!
+>1. Kublet이 container나 Pod를 노드에 적재하라는 요청을 받으면, Docker와 같은 Container Runtime Engine에 이미지 Pull을 하기위한 요청을 보낸다.
+>2. 
