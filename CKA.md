@@ -4,7 +4,7 @@ https://lg-cns.udemy.com/course/certified-kubernetes-administrator-with-practice
 ✔ 해당 영상의 내용을 바탕으로 정리한 문서입니다.  
 
 ------------------------------------------------------------------------
-## <b>ETCD
+## 🔎 <b>ETCD
 + ETCD란?
 >1. K8s 기반 스토리지이며 모든 데이터가 ETCD에 보관된다. 클러스터에 어떤 노드가 몇개있고 어떤 파드가 어떤 노드에서 동작하는지 등등
 >2. ETCD is a distributed reliable <b>key-value store<b> that is Simple, Secure & Fast   
@@ -23,7 +23,7 @@ https://lg-cns.udemy.com/course/certified-kubernetes-administrator-with-practice
 >.
 
 ---
-## <b>쿠버네티스 아키텍처구조</b>
+## 🔎 <b>쿠버네티스 아키텍처구조</b>
 ![img_2.png](img_2.png)
 * 간단한 아키텍처 흐름을 알아보자
 >1. 사용자가 kubectl 커맨드를 실행하면, kubectl utility가 kube-apiserver에 접근한다.  
@@ -41,19 +41,20 @@ https://lg-cns.udemy.com/course/certified-kubernetes-administrator-with-practice
 >9. 완료되면 kublet은 다시 api server로 업데이트된 데이터를 전달하고 api server는 다시 etcd로 데이터를 전달한다. 당연히 etcd는 다시 데이터를 update 한다.  
 
 ---
-## <b>Kube-Controller Manager
+## 🔎 <b>Kube-Controller Manager
 ![Alt text](img_3.png)  
 * 그림과 같이 다양한 Controller가 존재하며, 이런 Controller를 관리하는 역할을 한다.
 
 ---
-## <b>Kube Scheduler
+## 🔎 <b>Kube Scheduler
 * Kube Scheduler는 Pod가 어느 Node에 위치 할 지 정해주는 역할을 한다.   
 * Pod의 리소스에 맞게 최적의 Node를 선별하는 기준을 갖고 있다. (Filter Nodes, Rank Nodes 등)
 * 실제로 Pod를 위치시키는 것은 Kube Scheduler가 정한 Worker Node의 Kubelet이다.
 
 ---
-## <b>Kubelet
+## 🔎 <b>Kubelet
 ![Alt text](img_4.png)
-Kublet Architecture Flow를 알아보자!
->1. Kublet이 container나 Pod를 노드에 적재하라는 요청을 받으면, Docker와 같은 Container Runtime Engine에 이미지 Pull을 하기위한 요청을 보낸다.
->2. 
+* Kublet Architecture Flow를 알아보자!
+>1. Kublet이 container나 Pod를 노드에 적재하라는 요청을 받으면, Docker와 같은 Container Runtime Engine에 필요한 이미지 Pull을 하기위한 요청을 보내고 instance를 실행한다.
+>2. Kubelet은 Container, Pod의 상태를 모니터링하면서 동시에 API Server에 reporting한다.
+>3. kubeadm은 kubelets을 배포하지 않기 때문에 수동으로 설치해야한다.
