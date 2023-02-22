@@ -85,7 +85,34 @@ Kube Porxy는 새로운 Pod가 생성될 때 자신이 속해있는 Node의 ipta
 > 2. Application 이용하는 User가 늘어나면, POD 안에 동일한 Application을 생성하는 것이 아니라 새로운 POD를 생성하고 그 안에 동일한 Application을 생성한다.
 > 3. 여기서 사용자가 더 늘어났는데 사용중인 Worker Node의 수용 능력이 충분치 않다면, 새로운 Cluster에 Worker Node를 구성하고 동일한 Application을 가진 POD를 생성한다.
 
-* POD는 yml로 구성할 수 있다.
+### Create POD
+1. yaml Configuration
 ![Alt text](img_8.png)
 > * apiVersion, kind, metadata, spec은 가장 기본적인 4가지 top level property이다.
 > * property간 들여쓰기에 의해 관계 레벨이 정의된다.
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+    tier: frontend
+spec: #spec은 dictionary
+  containers:
+   - name: nginx #새로운 parameter 시작 시 - 사용
+     image: nginx # docker hub 사용한다면 full path 넣기
+```
+
+2. yml로 pod 생성 
+```shell
+kubectl apply -f pod.yml
+```
+
+3. 생성한 pod 확인
+![img_9.png](img_9.png)
+```shell
+kubectl get pods <pod명>
+kubectl describe pod <pod명>
+```
