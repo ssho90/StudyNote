@@ -85,7 +85,7 @@ Kube Porxy는 새로운 Pod가 생성될 때 자신이 속해있는 Node의 ipta
 > 2. Application 이용하는 User가 늘어나면, POD 안에 동일한 Application을 생성하는 것이 아니라 새로운 POD를 생성하고 그 안에 동일한 Application을 생성한다.
 > 3. 여기서 사용자가 더 늘어났는데 사용중인 Worker Node의 수용 능력이 충분치 않다면, 새로운 Cluster에 Worker Node를 구성하고 동일한 Application을 가진 POD를 생성한다.
 
-### Create POD
+### ✅ POD를 만들어보자
 1. yaml Configuration
 ![Alt text](img_8.png)
 > * apiVersion, kind, metadata, spec은 가장 기본적인 4가지 top level property이다.
@@ -110,9 +110,59 @@ spec: #spec은 dictionary
 kubectl apply -f pod.yml
 ```
 
-3. 생성한 pod 확인
+3. 생성한 pod 확인  
 ![img_9.png](img_9.png)
 ```shell
 kubectl get pods <pod명>
+kubectl get pods -o wide
 kubectl describe pod <pod명>
 ```
+
+4. 생성된 Pod 수정  
+4-1) yml없이 image로 바로 pod 생성한 경우
+```shell
+kubectl edit pod redis
+```
+![img_10.png](img_10.png)
+
+4-2) yml로 pod 생성한 경우
+```shell
+kubectl apply -f <yaml 파일명> 
+```
+
+---
+# 🔎 **ReplicaSets**
+* ReplicaSets을 사용하는 이유는 다음과 같다.  
+> 1. High Availability   
+>: Pod에 문제가 생겼을 시 새로운 Pod로 교체해준다.
+> 2. Load Balancing & Scaling  
+>: Application 사용량에 따라 ReplicaSets는 Node 및 Pod를 Scale out / Scale in 한다.
+* ReplicaSet vs Replication Controller
+> Replication Controller는 예전 기술이고, 요즘엔 ReplicaSet으로 대체되었다.  
+> Replication 셋업 시 ReplicaSet의 사용을 추천한다.
+ 
+ ### ✅ ReplicaSets를 만들어보자
+1. yaml 생성
+```yaml
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: myapp-rc
+  labels:
+    app: myapp
+    type: front-end
+spec:
+  template:
+    metadata: #파드 구성하는 yaml의 spec이다.
+      name: nginx
+      labels:
+        app: nginx
+        tier: frontend
+    spec:
+      containers:
+        - name: nginx
+          image: nginx 
+    replicas: 3
+```
+
+2. run
