@@ -58,3 +58,34 @@ https://lg-cns.udemy.com/course/certified-kubernetes-administrator-with-practice
 >1. Kublet이 container나 Pod를 노드에 적재하라는 요청을 받으면, Docker와 같은 Container Runtime Engine에 필요한 이미지 Pull을 하기위한 요청을 보내고 instance를 실행한다.
 >2. Kubelet은 Container, Pod의 상태를 모니터링하면서 동시에 API Server에 reporting한다.
 >3. kubeadm은 kubelets을 배포하지 않기 때문에 수동으로 설치해야한다.
+
+---
+## 🔎 <b>Kube Proxy
+* Service는 K8s Memory에만 있는 가상의 개념이다. 이 Service는 I/F나 listener가 없다. 그런데 Service는 Cluster를 통해 어느 Node에서나 접근 가능해야한다. 어떻게???  
+ ⇒  이때 필요한게 'Kube-Proxy' 이다.
+* 아래 그림처럼 Kube Proxy는 모든 Worker Node에 위치해있다. (이런 배치를 DaemonSet이라고 한다.)
+ ![Alt text](img_5.png)
+ 
+⭕ Pod간 I/F flow  
+![Alt text](img_6.png)
+>* Worker Node에는 두가지 Interface가 있다. Host I/F (그림의 eth0), Pod I/F (그림의 veth0)이다.  
+K8s의 특성상 Node와 Pod는 쉽게 변경되기 때문에 Host,Pod I/F를 이용해 Pod간 통신을 하는 것은 무리가 있다.
+>* router/gateway에 routing table이 설정돼있기 때문에 통신하려하는 Pod의 IP를 안다면 바로 해당 IP로 요청을 전달할 수 있지만 위에서 말한대로 Pod의 변경이 쉽게 일어나기때문에 동작하지 않을 수 있다.
+>* Kube Proxy는 새로운 서비스를 찾고, 새로운 서비스가 생성되면 각 Node에 실시간으로 적절한 Rule을 생성한다. 이때 사용하는 Rule 중 하나가 <b><u>'iptables rule'</u></b> 이다.  
+Kube Porxy는 새로운 Pod가 생성될 때 자신이 속해있는 Node의 iptables에 Rule을 추가한다.
+>* 더 자세한 Network Flow는 뒤에서 다룰 예정이다.
+
+---
+## 🔎 <b>PODs
+* K8s의 목적은 Application을 Worker Node에 구성된 Container에 구성하는 것이며, 이때 K8s는 Application을 바로 Container에 구성하지 않고 Pod 안에 감싸서 구성한다.  
+✔ Pod는 K8s에서 생성할 수 있는 가장 작은 단위의 개념이다. 
+* one application per one pod 
+![Alt text](img_7.png)  
+> 1. Worker Node 안에 POD가 생성돼있고, POD 안에 Applicatoin이 동작하고 있다. 
+> 2. Application 이용하는 User가 늘어나면, POD 안에 동일한 Application을 생성하는 것이 아니라 새로운 POD를 생성하고 그 안에 동일한 Application을 생성한다.
+> 3. 여기서 사용자가 더 늘어났는데 사용중인 Worker Node의 수용 능력이 충분치 않다면, 새로운 Cluster에 Worker Node를 구성하고 동일한 Application을 가진 POD를 생성한다.
+
+* POD는 yml로 구성할 수 있다.
+![Alt text](img_8.png)
+> * apiVersion, kind, metadata, spec은 가장 기본적인 4가지 top level property이다.
+> * property간 들여쓰기에 의해 관계 레벨이 정의된다.
